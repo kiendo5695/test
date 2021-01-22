@@ -19,6 +19,11 @@ abstract class ShippingFeeRepository implements ShippingFeeRepositoryInterface
         return $productWeight * $weightCoefficient;
     }
 
+    public function getFeeByProductType()
+    {
+        return 1;
+    }
+
     public function getShippingFee($feeByWeight, $feeByDimension)
     {
         return max($feeByWeight, $feeByDimension);

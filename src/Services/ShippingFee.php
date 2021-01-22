@@ -23,8 +23,10 @@ class ShippingFee
                     ->getFeeByDimension($item->with, $item->height, $item->depth);
                 $feeByWeight = $this->shippingFeeRepository
                     ->getFeeByWeight($item->productWeight);
-                $shippingFee = $this->shippingFeeRepository
-                    ->getShippingFee($feeByWeight, $feeByDimension);
+                $shippingFee = max(
+                    $this->shippingFeeRepository->getShippingFee($feeByWeight, $feeByDimension),
+                    $this->shippingFeeRepository->getFeeByProductType()
+                );
                 $itemPrice = $this->shippingFeeRepository
                     ->getItemPrice($item->amazonPrice, $shippingFee);
                 $grossPrice += $itemPrice;
