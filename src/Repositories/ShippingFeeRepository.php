@@ -1,25 +1,30 @@
 <?php
 
-namespace Repositories;
+namespace App\Repositories;
 
-abstract class EloquentRepository implements ShippingFeeRepositoryInterface
+abstract class ShippingFeeRepository implements ShippingFeeRepositoryInterface
 {
-    public function feeByDimension($width, $height, $depth, $dimensionCoefficient = 11)
+    public function getItems()
+    {
+        return [];
+    }
+
+    public function getFeeByDimension($width, $height, $depth, $dimensionCoefficient = 11)
     {
         return $width * $height * $depth * $dimensionCoefficient;
     }
 
-    public function feeByWeight($productWeight, $weightCoefficient = 11)
+    public function getFeeByWeight($productWeight, $weightCoefficient = 11)
     {
         return $productWeight * $weightCoefficient;
     }
 
-    public function shippingFee($feeByWeight, $feeByDimension)
+    public function getShippingFee($feeByWeight, $feeByDimension)
     {
         return max($feeByWeight, $feeByDimension);
     }
 
-    public function itemPrice($amazonPrice, $shippingFee)
+    public function getItemPrice($amazonPrice, $shippingFee)
     {
         return $amazonPrice + $shippingFee;
     }

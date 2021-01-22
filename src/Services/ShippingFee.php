@@ -1,8 +1,8 @@
 <?php
 
-namespace Services;
+namespace App\Services;
 
-use Repositories\ShippingFeeRepositoryInterface;
+use App\Repositories\ShippingFeeRepositoryInterface;
 
 class ShippingFee
 {
@@ -13,20 +13,20 @@ class ShippingFee
         $this->shippingFeeRepository = $shippingFeeRepository;
     }
 
-    public function grossPrice()
+    public function getGrossPrice()
     {
-        $items = [];
+        $items = $this->shippingFeeRepository->getItems();
         $grossPrice = 0;
         if (count($items)) {
             foreach ($items as $item) {
                 $feeByDimension = $this->shippingFeeRepository
-                    ->feeByDimension($item->with, $item->height, $item->depth);
+                    ->getFeeByDimension($item->with, $item->height, $item->depth);
                 $feeByWeight = $this->shippingFeeRepository
-                    ->feeByWeight($item->productWeight);
+                    ->getFeeByWeight($item->productWeight);
                 $shippingFee = $this->shippingFeeRepository
-                    ->shippingFee($feeByWeight, $feeByDimension);
+                    ->getShippingFee($feeByWeight, $feeByDimension);
                 $itemPrice = $this->shippingFeeRepository
-                    ->itemPrice($item->amazonPrice, $shippingFee);
+                    ->getItemPrice($item->amazonPrice, $shippingFee);
                 $grossPrice += $itemPrice;
             }
         }

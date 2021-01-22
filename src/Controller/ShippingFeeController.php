@@ -1,8 +1,8 @@
 <?php
 
-namespace Controller;
+namespace App\Controller;
 
-use Services\ShippingFee;
+use App\Services\ShippingFee;
 
 class ShippingFeeController
 {
@@ -15,6 +15,6 @@ class ShippingFeeController
 
     public function main()
     {
-        return $this->shippingFee->grossPrice();
+        return $this->shippingFee->getGrossPrice();
     }
 }

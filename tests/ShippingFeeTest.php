@@ -2,9 +2,9 @@
 
 namespace Tests;
 
-use Controller\ShippingFeeController;
+use App\Repositories\ShippingFeeRepository;
+use App\Services\ShippingFee;
 use \Mockery;
-use Models\Item;
 use PHPUnit\Framework\TestCase;
 
 class ShippingFeeTest extends TestCase
@@ -16,10 +16,19 @@ class ShippingFeeTest extends TestCase
 
     public function testShippingFeeReturnFee()
     {
-        $item = Mockery::mock(Item::class);
-        $item->shouldReceive('setWeight')->andReturn(1);
-        $item->shouldReceive('setDimensions')->andReturn(1);
-        $shippingFee = new ShippingFeeController($item);
-        $this->assertEquals(12, $shippingFee->main());
+        $item = new \stdClass();
+        $item->with = 1;
+        $item->height = 1;
+        $item->depth = 1;
+        $item->productWeight = 1;
+        $item->amazonPrice = 1;
+        $mockShippingFeeRepository = Mockery::mock(ShippingFeeRepository::class);
+        $mockShippingFeeRepository->shouldReceive('getItems')->andReturn([$item]);
+        $mockShippingFeeRepository->shouldReceive('getFeeByDimension')->andReturn(1);
+        $mockShippingFeeRepository->shouldReceive('getFeeByWeight')->andReturn(1);
+        $mockShippingFeeRepository->shouldReceive('getShippingFee')->andReturn(1);
+        $mockShippingFeeRepository->shouldReceive('getItemPrice')->andReturn(1);
+        $shippingFee = new ShippingFee($mockShippingFeeRepository);
+        $this->assertEquals(1, $shippingFee->getGrossPrice());
     }
 }
